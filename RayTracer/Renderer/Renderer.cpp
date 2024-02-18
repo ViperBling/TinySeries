@@ -1,25 +1,38 @@
-#include "Renderer.h"
+#include "Renderer.hpp"
+#include "Math.hpp"
+#include "Ray.hpp"
 
 void Renderer::Draw()
 {
-    int imageWidth = 512;
-    int imageHeight = 512;
+    float focalLength = 1.0;
+    float viewportHeight = 2.0;
+    float viewportWidth = mAspectRatio * viewportHeight;
 
-    std::cout << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
+    Point3 cameraPos = Point3(0, 0, 0);
 
-    for (int j = 0; j < imageHeight; j++)
+    Vector3 viewportU = Vector3(viewportWidth, 0, 0);
+    Vector3 viewportV = Vector3(0, -viewportHeight, 0);
+
+    auto pixelDeltaU = viewportU / mImageWidth;
+    auto pixelDeltaV = viewportV / mImageHeight;
+
+    auto viewportUpperLeft = cameraPos - Vector3(0, 0, focalLength) - viewportU / 2 - viewportV / 2;
+    auto pixel00Location = viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV);
+
+    std::cout << "P3\n" << mImageWidth << " " << mImageHeight << "\n255\n";
+
+    for (int j = 0; j < mImageHeight; j++)
     {
-        for (int i = 0; i < imageWidth; i++)
+        std::clog << "\rScanlines remaining: " << mImageHeight - j << " " << std::flush;
+        for (int i = 0; i < mImageWidth; i++)
         {
-            auto r = double(i) / (imageWidth - 1);
-            auto g = double(j) / (imageHeight - 1);
-            auto b = 0;
+            auto pixelCenter = pixel00Location + i * pixelDeltaU + j * pixelDeltaV;
+            auto rayDir = pixelCenter - cameraPos;
+            Ray ray(cameraPos, rayDir);
 
-            int ir = static_cast<int>(255.999 * r);
-            int ig = static_cast<int>(255.999 * g);
-            int ib = static_cast<int>(255.999 * b);
-
-            std::cout << ir << " " << ig << " " << ib << "\n";
+            Color pixelColor = ray.RayColor();
+            WriteColor(std::cout, pixelColor);
         }
     }
+    std::clog << "\rDone.                 \n";
 }
