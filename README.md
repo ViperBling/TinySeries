@@ -1,2 +1,2 @@
-# TinyRenderer
-A tiny renderer from ssloy
+# TinySeries
+包含TinyRenderer和RayTracer
