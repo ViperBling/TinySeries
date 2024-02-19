@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+﻿#include "Camera.hpp"
 #include "Scene/Geometry.hpp"
 #include "Utilities/Interval.hpp"
 
