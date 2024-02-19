@@ -11,7 +11,7 @@ int main()
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -100.5, -1), 100));
 
     Renderer::SceneRenderer renderer;
-    renderer.Initialize(960, 540, 1);
+    renderer.Initialize(960, 540, 100);
     renderer.Render(world);
 
     return 0;

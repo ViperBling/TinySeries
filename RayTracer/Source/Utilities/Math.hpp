@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utilities.hpp"
+
 #include <cmath>
 #include <iostream>
 
@@ -48,6 +50,16 @@ namespace Math
         double LengthSquared() const
         {
             return data[0] * data[0] + data[1] * data[1] + data[2] * data[2];
+        }
+
+        static Vector3 Random()
+        {
+            return Vector3(Utilities::RandomDouble(), Utilities::RandomDouble(), Utilities::RandomDouble());
+        }
+
+        static Vector3 Random(double min, double max)
+        {
+            return Vector3(Utilities::RandomDouble(min, max), Utilities::RandomDouble(min, max), Utilities::RandomDouble(min, max));
         }
 
     public:
@@ -107,6 +119,37 @@ namespace Math
     inline Vector3 Normalize(Vector3 v)
     {
         return v / v.Length();
+    }
+
+    inline Vector3 RandomOnUnitSphere()
+    {
+        while (true)
+        {
+            auto p = Vector3::Random(-1, 1);
+            if (p.LengthSquared() >= 1)
+            {
+                continue;
+            }
+            return p;
+        }
+    }
+
+    inline Vector3 RandomUnitVector()
+    {
+        return Normalize(RandomOnUnitSphere());
+    }
+
+    inline Vector3 RandomOnHemisphere(const Vector3& normal)
+    {
+        Vector3 onUnitSphere = RandomOnUnitSphere();
+        if (Dot(onUnitSphere, normal) > 0.0)
+        {
+            return onUnitSphere;
+        }
+        else
+        {
+            return -onUnitSphere;
+        }
     }
 
     void WriteColor(std::ostream& out, Color pixelColor, int samplesPerPixel);

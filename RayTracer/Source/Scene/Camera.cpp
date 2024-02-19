@@ -53,7 +53,7 @@ namespace Scene
                 for (int s = 0; s < mSamplesPerPixel; s++)
                 {
                     Ray ray = GetRay(i, j);
-                    pixelColor += RayColor(ray, world);
+                    pixelColor += RayColor(ray, world, mMaxDepth);
                 }
                 Math::WriteColor(std::cout, pixelColor, mSamplesPerPixel);
             }
@@ -79,13 +79,18 @@ namespace Scene
         return Ray(rayOrigin, rayDirection);
     }
 
-    Math::Color Camera::RayColor(const Ray &ray, const Geometry &worldHit) const
+    Math::Color Camera::RayColor(const Ray &ray, const Geometry &worldHit, int depth) const
     {
+        if (depth <= 0)
+        {
+            return Math::Color(0, 0, 0);
+        }
         HitPoint hit;
 
-        if (worldHit.Hit(ray, Utilities::Interval(0, Utilities::Infinity), hit))
+        if (worldHit.Hit(ray, Utilities::Interval(0.001, Utilities::Infinity), hit))
         {
-            return 0.5 * (hit.mNormal + Math::Color(1, 1, 1));
+            Math::Vector3 direction = Math::RandomOnHemisphere(hit.mNormal);
+            return 0.5 * RayColor(Ray(hit.mPoint, direction), worldHit, depth - 1);
         }
 
         Math::Vector3 unitDirection = Math::Normalize(ray.Direction());
