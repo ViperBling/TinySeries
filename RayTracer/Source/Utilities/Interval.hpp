@@ -29,6 +29,11 @@ namespace Utilities
             return value > mMin && value < mMax;
         }
 
+        double Clamp(double value) const
+        {
+            return std::clamp(value, mMin, mMax);
+        }
+
     public:
         double mMin;
         double mMax;

@@ -14,16 +14,19 @@ namespace Scene
     {
     public:
         Camera() = default;
-        void Initialize(int imageWidth, int imageHeight);
+        void Initialize(int imageWidth, int imageHeight, int samplesPerPixel);
         void Render(const Scene::Geometry& world);
 
     private:
+        Math::Vector3 PixelSampleSquare() const;
+        Ray GetRay(int i, int j) const;
         Math::Color RayColor(const Ray& ray, const Geometry& worldHit) const;
 
     public:
         double mAspectRatio = 1.0;
         int mImageWidth = 100;
         int mImageHeight = 100;
+        int mSamplesPerPixel = 10;
 
     private:
         Math::Point3 mOrigin;

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <cstdlib>
+#include <random>
 #include <limits>
 #include <memory>
 
@@ -12,5 +14,17 @@ namespace Utilities
     inline double DegreesToRadians(double degrees)
     {
         return degrees * Pi / 180.0;
+    }
+
+    inline double RandomDouble()
+    {
+        static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+        static std::mt19937 generator;
+        return distribution(generator);
+    }
+
+    inline double RandomDouble(double min, double max)
+    {
+        return min + (max - min) * RandomDouble();
     }
 }

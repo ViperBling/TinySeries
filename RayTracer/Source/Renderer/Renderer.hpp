@@ -17,7 +17,7 @@ namespace Renderer
         SceneRenderer() = default;
         ~SceneRenderer() = default;
 
-        void Initialize(int imageWidth, int imageHeight);
+        void Initialize(int imageWidth, int imageHeight, int samplesPerPixel);
         void Render(const Scene::GeometryList& world);
 
     private:

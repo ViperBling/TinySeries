@@ -3,9 +3,9 @@
 
 namespace Renderer
 {
-    void SceneRenderer::Initialize(int imageWidth, int imageHeight)
+    void SceneRenderer::Initialize(int imageWidth, int imageHeight, int samplesPerPixel)
     {
-        mCamera.Initialize(imageWidth, imageHeight);
+        mCamera.Initialize(imageWidth, imageHeight, samplesPerPixel);
     }
 
     void SceneRenderer::Render(const Scene::GeometryList& world)
