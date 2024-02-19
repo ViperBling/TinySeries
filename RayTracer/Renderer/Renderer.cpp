@@ -1,32 +1,14 @@
 #include "Renderer.hpp"
-#include "Math.hpp"
-#include "Ray.hpp"
+#include "Utilities.hpp"
+#include "Geometry.hpp"
+#include "Sphere.hpp"
 
-double HitSphere(const Point3& center, double radius, const Ray& ray)
+Color RayColor(const Ray& ray, const Geometry& worldHit)
 {
-    Vector3 oc = ray.Origin() - center;
-    auto a = ray.Direction().LengthSquared();
-    auto halfB = Dot(oc, ray.Direction());
-    auto c = oc.LengthSquared() - radius * radius;
-    auto discriminant = halfB * halfB - a * c;
-
-    if (discriminant < 0)
+    HitPoint hitPoint;
+    if (worldHit.Hit(ray, Interval(0, Infinity), hitPoint))
     {
-        return -1.0;
-    }
-    else
-    {
-        return (-halfB - sqrt(discriminant)) / a;
-    }
-}
-
-Color RayColor(const Ray& ray)
-{
-    auto t = HitSphere(Point3(0, 0, -1), 0.5, ray);
-    if (t > 0)
-    {
-        Vector3 N = Normalize(ray.At(t) - Vector3(0, 0, -1));
-        return 0.5 * Color(N.x() + 1, N.y() + 1, N.z() + 1);
+        return 0.5 * (hitPoint.mNormal + Color(1, 1, 1));
     }
    
     Vector3 unitDirection = Normalize(ray.Direction());
@@ -36,6 +18,11 @@ Color RayColor(const Ray& ray)
 
 void Renderer::Draw()
 {
+    GeometryList world;
+    world.Add(std::make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+    world.Add(std::make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+
+    // Camera
     float focalLength = 1.0;
     float viewportHeight = 2.0;
     float viewportWidth = mAspectRatio * viewportHeight;
@@ -62,7 +49,7 @@ void Renderer::Draw()
             auto rayDir = pixelCenter - cameraPos;
             Ray ray(cameraPos, rayDir);
 
-            Color pixelColor = RayColor(ray);
+            Color pixelColor = RayColor(ray, world);
             WriteColor(std::cout, pixelColor);
         }
     }

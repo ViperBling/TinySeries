@@ -1,0 +1,64 @@
+#pragma once
+
+#include "Interval.hpp"
+#include "Ray.hpp"
+
+#include <memory>
+#include <vector>
+
+class HitPoint
+{
+public:
+    void SetFaceNormal(const Ray& ray, const Vector3& outwardNormal)
+    {
+        mbFrontFace = Dot(ray.Direction(), outwardNormal) < 0;
+        mNormal = mbFrontFace ? outwardNormal : -outwardNormal;
+    }
+
+public:
+    Point3 mPoint;
+    Vector3 mNormal;
+    double mT;
+    bool mbFrontFace;
+};
+
+class Geometry
+{
+public:
+    virtual ~Geometry() = default;
+    virtual bool Hit(const Ray& ray, Interval rayT, HitPoint& hitPoint) const = 0;
+};
+
+class GeometryList : public Geometry
+{
+public:
+    GeometryList() = default;
+    GeometryList(std::shared_ptr<Geometry> geometry)
+    {
+        Add(geometry);
+    }
+
+    void Clear() { mGeometries.clear(); }
+    void Add(std::shared_ptr<Geometry> geometry) { mGeometries.push_back(geometry); }
+
+    bool Hit(const Ray& ray, Interval rayT, HitPoint& hitPoint) const override
+    {
+        HitPoint tempHitPoint;
+        bool hitAnything = false;
+        double closestSoFar = rayT.mMax;
+
+        for (const auto& geometry : mGeometries)
+        {
+            if (geometry->Hit(ray, Interval(rayT.mMin, closestSoFar), tempHitPoint))
+            {
+                hitAnything = true;
+                closestSoFar = tempHitPoint.mT;
+                hitPoint = tempHitPoint;
+            }
+        }
+        return hitAnything;
+    }
+
+public:
+    std::vector<std::shared_ptr<Geometry>> mGeometries;
+};
