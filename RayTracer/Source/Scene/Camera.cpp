@@ -1,6 +1,7 @@
 ﻿#include "Camera.hpp"
 #include "Scene/Geometry.hpp"
 #include "Utilities/Interval.hpp"
+#include "Material.hpp"
 
 namespace Scene
 {
@@ -89,8 +90,13 @@ namespace Scene
 
         if (worldHit.Hit(ray, Utilities::Interval(0.001, Utilities::Infinity), hit))
         {
-            Math::Vector3 direction = Math::RandomOnHemisphere(hit.mNormal);
-            return 0.5 * RayColor(Ray(hit.mPoint, direction), worldHit, depth - 1);
+            Ray scattered;
+            Math::Color attenuation;
+            if (hit.mMaterial->Scatter(ray, hit, attenuation, scattered))
+            {
+                return attenuation * RayColor(scattered, worldHit, depth - 1);
+            }
+            return Math::Color(0, 0, 0);
         }
 
         Math::Vector3 unitDirection = Math::Normalize(ray.Direction());

@@ -8,8 +8,10 @@ namespace Scene
     class Sphere : public Geometry
     {
     public:
-        Sphere(Math::Point3 center, double radius)
-            : mCenter(center), mRadius(radius)
+        Sphere(Math::Point3 center, double radius, std::shared_ptr<Material> material)
+            : mCenter(center)
+            , mRadius(radius)
+            , mMaterial(material)
         {}
 
         bool Hit(const Ray& ray, Utilities::Interval rayT, HitPoint& hitPoint) const override
@@ -38,11 +40,13 @@ namespace Scene
             hitPoint.mPoint = ray.At(hitPoint.mT);
             Math::Vector3 outwardNormal = (hitPoint.mPoint - mCenter) / mRadius;
             hitPoint.SetFaceNormal(ray, outwardNormal);
+            hitPoint.mMaterial = mMaterial;
             return true;
         }
 
     private:
         Math::Point3 mCenter;
         double mRadius;
+        std::shared_ptr<Material> mMaterial;
     };
 }

@@ -8,6 +8,8 @@
 
 namespace Scene
 {
+    class Material;
+    
     class HitPoint
     {
     public:
@@ -20,6 +22,7 @@ namespace Scene
     public:
         Math::Point3 mPoint;
         Math::Vector3 mNormal;
+        std::shared_ptr<Material> mMaterial;
         double mT;
         bool mbFrontFace;
     };

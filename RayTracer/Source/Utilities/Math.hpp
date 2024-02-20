@@ -52,6 +52,12 @@ namespace Math
             return data[0] * data[0] + data[1] * data[1] + data[2] * data[2];
         }
 
+        bool NearZero() const
+        {
+            const auto s = 1e-8;
+            return (std::fabs(data[0]) < s) && (std::fabs(data[1]) < s) && (std::fabs(data[2]) < s);
+        }
+
         static Vector3 Random()
         {
             return Vector3(Utilities::RandomDouble(), Utilities::RandomDouble(), Utilities::RandomDouble());
@@ -150,6 +156,16 @@ namespace Math
         {
             return -onUnitSphere;
         }
+    }
+
+    inline Vector3 Reflect(const Vector3& v, const Vector3& n)
+    {
+        return v - 2 * Dot(v, n) * n;
+    }
+
+    inline double LinearToGamma(double linear)
+    {
+        return std::sqrt(linear);
     }
 
     void WriteColor(std::ostream& out, Color pixelColor, int samplesPerPixel);

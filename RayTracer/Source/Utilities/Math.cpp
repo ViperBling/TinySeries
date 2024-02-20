@@ -13,6 +13,11 @@ namespace Math
         r *= scale;
         g *= scale;
         b *= scale;
+        
+        r = LinearToGamma(r);
+        g = LinearToGamma(g);
+        b = LinearToGamma(b);
+
         static const Utilities::Interval intensity(0.0, 0.999);
 
         out << static_cast<int>(256 * intensity.Clamp(r)) << ' '

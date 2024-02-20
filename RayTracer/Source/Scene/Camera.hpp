@@ -27,7 +27,7 @@ namespace Scene
         int mImageWidth = 100;
         int mImageHeight = 100;
         int mSamplesPerPixel = 10;
-        int mMaxDepth = 50;
+        int mMaxDepth = 10;
 
     private:
         Math::Point3 mOrigin;
