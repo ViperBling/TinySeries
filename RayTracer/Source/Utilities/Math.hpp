@@ -163,6 +163,14 @@ namespace Math
         return v - 2 * Dot(v, n) * n;
     }
 
+    inline Vector3 Refract(const Vector3& uv, const Vector3& n, double etaiOverEtat)
+    {
+        auto cosTheta = fmin(Dot(-uv, n), 1.0);
+        Vector3 rOutPerp = etaiOverEtat * (uv + cosTheta * n);
+        Vector3 rOutParallel = -std::sqrt(fabs(1.0 - rOutPerp.LengthSquared())) * n;
+        return rOutParallel + rOutPerp;
+    }
+
     inline double LinearToGamma(double linear)
     {
         return std::sqrt(linear);
