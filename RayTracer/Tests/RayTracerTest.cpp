@@ -18,8 +18,20 @@ int main()
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3(-1.0,    0.0, -1.0),   0.5, matLeft));
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3( 1.0,    0.0, -1.0),   0.5, matRight));
 
+    Scene::Camera camera;
+    camera.mImageWidth = 960;
+    camera.mImageHeight = 540;
+    camera.mSamplesPerPixel = 80;
+    camera.mMaxDepth = 50;
+    camera.mFov = 20;
+    camera.mLookFrom = Math::Point3(-2, 2, 1);
+    camera.mLookAt = Math::Point3(0, 0, -1);
+    camera.mUp = Math::Vector3(0, 1, 0);
+    camera.mDefocusAngle = 10.0;
+    camera.mFocusDistance = 3.4;
+
     Renderer::SceneRenderer renderer;
-    renderer.Initialize(960, 540, 80);
+    renderer.Initialize(camera);
     renderer.Render(world);
 
     return 0;

@@ -127,16 +127,27 @@ namespace Math
         return v / v.Length();
     }
 
+    inline Vector3 RandomInUnitDisk()
+    {
+        while (true)
+        {
+            auto p = Vector3(Utilities::RandomDouble(-1, 1), Utilities::RandomDouble(-1, 1), 0);
+            if (p.LengthSquared() < 1)
+            {
+                return p;
+            }
+        }
+    }
+
     inline Vector3 RandomOnUnitSphere()
     {
         while (true)
         {
             auto p = Vector3::Random(-1, 1);
-            if (p.LengthSquared() >= 1)
+            if (p.LengthSquared() < 1)
             {
-                continue;
+                return p;
             }
-            return p;
         }
     }
 
