@@ -11,9 +11,9 @@ int main()
     auto matGround = std::make_shared<Scene::Lambertian>(Math::Color(0.5, 0.5, 0.5));
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, matGround));
 
-    for (int i = -3; i < 3; i++)
+    for (int i = -11; i < 11; i++)
     {
-        for (int j = -3; j < 3; j++)
+        for (int j = -11; j < 11; j++)
         {
             auto matChoose = Utilities::RandomDouble();
             Math::Point3 center(i + 0.9 * Utilities::RandomDouble(), 0.2, j + 0.9 * Utilities::RandomDouble());
@@ -58,10 +58,10 @@ int main()
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3( 4.0, 1.0, 0.0), 1.0, matMetal));
 
     Scene::Camera camera;
-    camera.mImageWidth = 960;
-    camera.mImageHeight = 540;
-    camera.mSamplesPerPixel = 80;
-    camera.mMaxDepth = 10;
+    camera.mImageWidth = 1280;
+    camera.mImageHeight = 720;
+    camera.mSamplesPerPixel = 500;
+    camera.mMaxDepth = 50;
     camera.mFov = 20;
     camera.mLookFrom = Math::Point3(13, 2, 3);
     camera.mLookAt = Math::Point3(0, 0, 0);
