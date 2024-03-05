@@ -2,6 +2,7 @@
 #include "Scene/Geometry.hpp"
 #include "Utilities/Interval.hpp"
 #include "Material.hpp"
+#include "omp.h"
 
 namespace Scene
 {
@@ -61,6 +62,8 @@ namespace Scene
             for (int i = 0; i < mImageWidth; i++)
             {
                 Math::Color pixelColor(0, 0, 0);
+                // omp_set_num_threads(4);
+                #pragma omp parallel for
                 for (int s = 0; s < mSamplesPerPixel; s++)
                 {
                     Ray ray = GetRay(i, j);
