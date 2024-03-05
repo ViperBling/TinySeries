@@ -10,7 +10,7 @@ namespace Scene
         {
             scatterDirection = hitPoint.mNormal;
         }
-        scattered = Ray(hitPoint.mPoint, scatterDirection);
+        scattered = Ray(hitPoint.mPoint, scatterDirection, ray.Time());
         attenuation = mAlbedo;
         return true;
     }
@@ -18,7 +18,7 @@ namespace Scene
     bool Metal::Scatter(const Ray &ray, const HitPoint &hitPoint, Math::Color &attenuation, Ray &scattered) const
     {
         Math::Vector3 reflected = Math::Reflect(Math::Normalize(ray.Direction()), hitPoint.mNormal);
-        scattered = Ray(hitPoint.mPoint, reflected + mFuzz * Math::RandomUnitVector());
+        scattered = Ray(hitPoint.mPoint, reflected + mFuzz * Math::RandomUnitVector(), ray.Time());
         attenuation = mAlbedo;
         return (Math::Dot(scattered.Direction(), hitPoint.mNormal) > 0);
     }
@@ -42,7 +42,7 @@ namespace Scene
         {
             direction = Math::Refract(unitDirection, hitPoint.mNormal, refractionRatio);
         }
-        scattered = Ray(hitPoint.mPoint, direction);
+        scattered = Ray(hitPoint.mPoint, direction, ray.Time());
         return true;
     }
 }

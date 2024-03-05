@@ -11,9 +11,9 @@ int main()
     auto matGround = std::make_shared<Scene::Lambertian>(Math::Color(0.5, 0.5, 0.5));
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, matGround));
 
-    for (int i = -11; i < 11; i++)
+    for (int i = -5; i < 5; i++)
     {
-        for (int j = -11; j < 11; j++)
+        for (int j = -5; j < 5; j++)
         {
             auto matChoose = Utilities::RandomDouble();
             Math::Point3 center(i + 0.9 * Utilities::RandomDouble(), 0.2, j + 0.9 * Utilities::RandomDouble());
@@ -27,7 +27,8 @@ int main()
                     // Diffuse
                     auto albedo = Math::Vector3::Random() * Math::Vector3::Random();
                     sphereMaterial = std::make_shared<Scene::Lambertian>(albedo);
-                    world.Add(std::make_shared<Scene::Sphere>(center, 0.2, sphereMaterial));
+                    auto center2 = center + Math::Vector3(0, 0, Utilities::RandomDouble(0, 0.5));
+                    world.Add(std::make_shared<Scene::Sphere>(center, center2, 0.2, sphereMaterial));
                 }
                 else if (matChoose < 0.95)
                 {
@@ -44,7 +45,7 @@ int main()
                     world.Add(std::make_shared<Scene::Sphere>(center, 0.2, sphereMaterial));
                 }
 
-                world.Add(std::make_shared<Scene::Sphere>(center, 0.2, sphereMaterial));
+                // world.Add(std::make_shared<Scene::Sphere>(center, 0.2, sphereMaterial));
             }
         }
     }
@@ -58,10 +59,10 @@ int main()
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3( 4.0, 1.0, 0.0), 1.0, matMetal));
 
     Scene::Camera camera;
-    camera.mImageWidth = 1280;
-    camera.mImageHeight = 720;
-    camera.mSamplesPerPixel = 500;
-    camera.mMaxDepth = 50;
+    camera.mImageWidth = 480;
+    camera.mImageHeight = 270;
+    camera.mSamplesPerPixel = 100;
+    camera.mMaxDepth = 10;
     camera.mFov = 20;
     camera.mLookFrom = Math::Point3(13, 2, 3);
     camera.mLookAt = Math::Point3(0, 0, 0);

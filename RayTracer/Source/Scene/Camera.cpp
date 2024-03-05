@@ -89,8 +89,9 @@ namespace Scene
 
         auto rayOrigin = (mDefocusAngle <= 0) ? mOrigin : DefocusDiskSample();
         auto rayDirection = pixelSample - rayOrigin;
+        auto rayTime = Utilities::RandomDouble();
 
-        return Ray(rayOrigin, rayDirection);
+        return Ray(rayOrigin, rayDirection, rayTime);
     }
 
     Math::Color Camera::RayColor(const Ray &ray, const Geometry &worldHit, int depth) const
