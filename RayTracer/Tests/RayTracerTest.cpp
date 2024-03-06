@@ -59,8 +59,8 @@ int main()
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3( 4.0, 1.0, 0.0), 1.0, matMetal));
 
     Scene::Camera camera;
-    camera.mImageWidth = 480;
-    camera.mImageHeight = 270;
+    camera.mImageWidth = 960;
+    camera.mImageHeight = 540;
     camera.mSamplesPerPixel = 100;
     camera.mMaxDepth = 10;
     camera.mFov = 20;

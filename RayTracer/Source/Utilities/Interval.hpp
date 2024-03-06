@@ -34,6 +34,17 @@ namespace Utilities
             return std::clamp(value, mMin, mMax);
         }
 
+        double Size() const
+        {
+            return mMax - mMin;
+        }
+
+        Interval Expand(double delta) const
+        {
+            auto padding = delta * 0.5;
+            return Interval(mMin - padding, mMax + padding);
+        }
+
     public:
         double mMin;
         double mMax;
