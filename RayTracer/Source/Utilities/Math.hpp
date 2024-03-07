@@ -169,6 +169,11 @@ namespace Math
         }
     }
 
+    inline int RandomInt(int min, int max)
+    {
+        return static_cast<int>(Utilities::RandomDouble(min, max + 1));
+    }
+
     inline Vector3 Reflect(const Vector3& v, const Vector3& n)
     {
         return v - 2 * Dot(v, n) * n;

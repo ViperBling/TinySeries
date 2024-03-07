@@ -4,6 +4,7 @@
 
 namespace Utilities
 {
+    // 区间类，代表一个区间（一维）
     class Interval
     {
     public:
@@ -15,6 +16,11 @@ namespace Utilities
             : mMin(min)
             , mMax(max)
         {}
+        Interval(const Interval& A, const Interval& B)
+            : mMin(std::fmin(A.mMin, B.mMin))
+            , mMax(std::fmax(A.mMax, B.mMax))
+        {}
+
         bool Contains(double value) const
         {
             return value >= mMin && value <= mMax;

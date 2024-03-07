@@ -1,8 +1,10 @@
 #include "Scene/Sphere.hpp"
 #include "Scene/Material.hpp"
+#include "Scene/BVH.hpp"
 #include "Renderer/Renderer.hpp"
 
 #include <iostream>
+#include <chrono>
 
 int main()
 {
@@ -27,8 +29,9 @@ int main()
                     // Diffuse
                     auto albedo = Math::Vector3::Random() * Math::Vector3::Random();
                     sphereMaterial = std::make_shared<Scene::Lambertian>(albedo);
-                    auto center2 = center + Math::Vector3(0, 0, Utilities::RandomDouble(0, 0.5));
-                    world.Add(std::make_shared<Scene::Sphere>(center, center2, 0.2, sphereMaterial));
+                    // auto center2 = center + Math::Vector3(0, 0, Utilities::RandomDouble(0, 0.5));
+                    // world.Add(std::make_shared<Scene::Sphere>(center, center2, 0.2, sphereMaterial));
+                    world.Add(std::make_shared<Scene::Sphere>(center, 0.2, sphereMaterial));
                 }
                 else if (matChoose < 0.95)
                 {
@@ -57,6 +60,7 @@ int main()
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3(-4.0, 1.0, 0.0), 1.0, matLambertian));
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3( 0.0, 1.0, 0.0), 1.0, matGlass));
     world.Add(std::make_shared<Scene::Sphere>(Math::Point3( 4.0, 1.0, 0.0), 1.0, matMetal));
+    world = Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
 
     Scene::Camera camera;
     camera.mImageWidth = 960;
@@ -72,7 +76,12 @@ int main()
 
     Renderer::SceneRenderer renderer;
     renderer.Initialize(camera);
+
+    auto tStart = std::chrono::high_resolution_clock::now();
     renderer.Render(world);
+    auto tEnd = std::chrono::high_resolution_clock::now();
+
+    std::clog << "Time: " << std::chrono::duration_cast<std::chrono::seconds>(tEnd - tStart).count() << "s" << std::flush;
 
     return 0;
 }

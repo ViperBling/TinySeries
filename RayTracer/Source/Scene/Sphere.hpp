@@ -14,7 +14,10 @@ namespace Scene
             , mMaterial(material)
             , mbIsMoving(false)
             , mMovingVector(0, 0, 0)
-        {}
+        {
+            auto rVec = Math::Vector3(radius, radius, radius);
+            mBoundingBox = Scene::AABB(center - rVec, center + rVec);
+        }
 
         Sphere(Math::Point3 center1, Math::Point3 center2, double radius, std::shared_ptr<Material> material)
             : mCenter(center1)
@@ -22,7 +25,12 @@ namespace Scene
             , mMaterial(material)
             , mbIsMoving(true)
             , mMovingVector(center2 - center1)
-        {}
+        {
+            auto rVec = Math::Vector3(radius, radius, radius);
+            Scene::AABB box1(center1 - rVec, center1 + rVec);
+            Scene::AABB box2(center2 - rVec, center2 + rVec);
+            mBoundingBox = Scene::AABB(box1, box2);
+        }
 
         bool Hit(const Ray& ray, Utilities::Interval rayT, HitPoint& hitPoint) const override
         {
@@ -55,6 +63,11 @@ namespace Scene
             return true;
         }
 
+        Scene::AABB BoundingBox() const override
+        {
+            return mBoundingBox;
+        }
+
     private:
         Math::Point3 SphereCenter(double time) const
         {
@@ -67,5 +80,6 @@ namespace Scene
         std::shared_ptr<Material> mMaterial;
         bool mbIsMoving;
         Math::Vector3 mMovingVector;
+        Scene::AABB mBoundingBox;
     };
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utilities/Interval.hpp"
+#include "Scene/AABB.hpp"
 #include "Scene/Ray.hpp"
 
 #include <memory>
@@ -32,6 +33,7 @@ namespace Scene
     public:
         virtual ~Geometry() = default;
         virtual bool Hit(const Ray& ray, Utilities::Interval rayT, HitPoint& hitPoint) const = 0;
+        virtual Scene::AABB BoundingBox() const = 0;
     };
 
     class GeometryList : public Geometry
@@ -44,7 +46,11 @@ namespace Scene
         }
 
         void Clear() { mGeometries.clear(); }
-        void Add(std::shared_ptr<Geometry> geometry) { mGeometries.push_back(geometry); }
+        void Add(std::shared_ptr<Geometry> geometry) 
+        { 
+            mGeometries.push_back(geometry); 
+            mBoundingBox = Scene::AABB(mBoundingBox, geometry->BoundingBox());
+        }
 
         bool Hit(const Ray& ray, Utilities::Interval rayT, HitPoint& hitPoint) const override
         {
@@ -64,7 +70,14 @@ namespace Scene
             return hitAnything;
         }
 
+        Scene::AABB BoundingBox() const override
+        {
+            return mBoundingBox;
+        }
+
     public:
         std::vector<std::shared_ptr<Geometry>> mGeometries;
+    private:
+        Scene::AABB mBoundingBox;
     };
 }
