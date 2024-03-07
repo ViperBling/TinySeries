@@ -11,7 +11,7 @@ namespace Scene
             scatterDirection = hitPoint.mNormal;
         }
         scattered = Ray(hitPoint.mPoint, scatterDirection, ray.Time());
-        attenuation = mAlbedo;
+        attenuation = mAlbedo->Value(hitPoint.mU, hitPoint.mV, hitPoint.mPoint);
         return true;
     }
 

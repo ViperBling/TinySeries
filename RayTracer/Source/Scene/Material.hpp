@@ -2,6 +2,7 @@
 
 #include "Utilities/Utilities.hpp"
 #include "Utilities/Math.hpp"
+#include "Texture.hpp"
 
 namespace Scene
 {
@@ -19,12 +20,16 @@ namespace Scene
     {
     public:
         Lambertian(const Math::Color& albedo)
+            : mAlbedo(std::make_shared<SolidTexture>(albedo))
+        {}
+        Lambertian(std::shared_ptr<Texture> albedo)
             : mAlbedo(albedo)
         {}
+        
         bool Scatter(const Ray& ray, const HitPoint& hitPoint, Math::Color& attenuation, Ray& scattered) const override;
 
     private:
-        Math::Color mAlbedo;
+        std::shared_ptr<Texture> mAlbedo;
     };
 
     class Metal : public Material

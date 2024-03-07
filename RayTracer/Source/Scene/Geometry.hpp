@@ -25,6 +25,8 @@ namespace Scene
         Math::Vector3 mNormal;
         std::shared_ptr<Material> mMaterial;
         double mT;
+        double mU;
+        double mV;
         bool mbFrontFace;
     };
 

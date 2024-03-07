@@ -53,7 +53,12 @@
         "xutility": "cpp",
         "algorithm": "cpp",
         "optional": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "chrono": "cpp",
+        "forward_list": "cpp",
+        "iomanip": "cpp",
+        "ratio": "cpp",
+        "sstream": "cpp"
     },
     "cmake.debugConfig": {
         "args" : [">", "image.ppm"]
