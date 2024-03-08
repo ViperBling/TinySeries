@@ -102,20 +102,18 @@ namespace Scene
         }
         HitPoint hit;
 
-        if (worldHit.Hit(ray, Utilities::Interval(0.001, Utilities::Infinity), hit))
+        if (!worldHit.Hit(ray, Utilities::Interval(0.001, Utilities::Infinity), hit))
         {
-            Ray scattered;
-            Math::Color attenuation;
-            if (hit.mMaterial->Scatter(ray, hit, attenuation, scattered))
-            {
-                return attenuation * RayColor(scattered, worldHit, depth - 1);
-            }
+            return mBackgroundColor;
+        }
+        
+        Ray scattered;
+        Math::Color attenuation;
+        if (!hit.mMaterial->Scatter(ray, hit, attenuation, scattered))
+        {
             return Math::Color(0, 0, 0);
         }
-
-        Math::Vector3 unitDirection = Math::Normalize(ray.Direction());
-        double t = 0.5 * (unitDirection.y() + 1.0);
-        return (1.0 - t) * Math::Color(1.0, 1.0, 1.0) + t * Math::Color(0.5, 0.7, 1.0);
+        return attenuation * RayColor(scattered, worldHit, depth - 1);
     }
 
     Math::Point3 Camera::DefocusDiskSample() const

@@ -11,10 +11,10 @@ void WorldRandomSpheres()
 {
     Scene::GeometryList world;
 
-    auto matGround = std::make_shared<Scene::Lambertian>(Math::Color(0.5, 0.5, 0.5));
-    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, matGround));
-    // auto checkerGround = std::make_shared<Scene::CheckerTexture>(0.32, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
-    // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(checkerGround)));
+    // auto matGround = std::make_shared<Scene::Lambertian>(Math::Color(0.5, 0.5, 0.5));
+    // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, matGround));
+    auto checkerGround = std::make_shared<Scene::CheckerTexture>(0.8, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
+    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(checkerGround)));
 
     for (int i = -5; i < 5; i++)
     {
@@ -78,6 +78,7 @@ void WorldRandomSpheres()
     camera.mUp = Math::Vector3(0, 1, 0);
     camera.mDefocusAngle = 0.6;
     camera.mFocusDistance = 10;
+    camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
 
     Renderer::SceneRenderer renderer;
     renderer.Initialize(camera);
@@ -93,21 +94,23 @@ void WorldTwoSpheres()
 {
     Scene::GeometryList world;
 
-    auto checker = std::make_shared<Scene::CheckerTexture>(0.8, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
+    auto checker = std::make_shared<Scene::CheckerTexture>(0.1, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
 
-    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -10, 0), 10, std::make_shared<Scene::Lambertian>(checker)));
-    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0,  10, 0), 10, std::make_shared<Scene::Lambertian>(checker)));
+    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1, 0), 1, std::make_shared<Scene::Lambertian>(checker)));
+    // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, 10, 0), 10, std::make_shared<Scene::Lambertian>(checker)));
+    world = Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
 
     Scene::Camera camera;
     camera.mImageWidth = 960;
     camera.mImageHeight = 540;
-    camera.mSamplesPerPixel = 100;
-    camera.mMaxDepth = 50;
+    camera.mSamplesPerPixel = 50;
+    camera.mMaxDepth = 10;
     camera.mFov = 20;
-    camera.mLookFrom = Math::Point3(13, 2, 3);
+    camera.mLookFrom = Math::Point3(13, 2, 0);
     camera.mLookAt = Math::Point3(0, 0, 0);
     camera.mUp = Math::Vector3(0, 1, 0);
     camera.mDefocusAngle = 0;
+    camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
 
     Renderer::SceneRenderer renderer;
     renderer.Initialize(camera);
@@ -121,7 +124,17 @@ void WorldTwoSpheres()
 
 int main()
 {
-    WorldTwoSpheres();
+    switch (1)
+    {
+    case 0:
+        WorldRandomSpheres();
+        break;
+    case 1:
+        WorldTwoSpheres();
+        break;
+    default:
+        break;
+    }
 
     return 0;
 }

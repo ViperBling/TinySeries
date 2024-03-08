@@ -29,6 +29,7 @@ namespace Scene
         int mImageHeight = 100;
         int mSamplesPerPixel = 10;
         int mMaxDepth = 10;
+        Math::Color mBackgroundColor = Math::Color(0, 0, 0);
 
         double mFov = 90;
         Math::Point3 mLookFrom = Math::Point3(0, 0, -1);

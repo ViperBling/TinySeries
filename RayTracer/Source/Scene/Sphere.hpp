@@ -59,6 +59,7 @@ namespace Scene
             hitPoint.mPoint = ray.At(hitPoint.mT);
             Math::Vector3 outwardNormal = (hitPoint.mPoint - mCenter) / mRadius;
             hitPoint.SetFaceNormal(ray, outwardNormal);
+            GetSphereUV(outwardNormal, hitPoint.mU, hitPoint.mV);
             hitPoint.mMaterial = mMaterial;
             return true;
         }
@@ -72,6 +73,15 @@ namespace Scene
         Math::Point3 SphereCenter(double time) const
         {
             return mCenter + time * mMovingVector;
+        }
+
+        static void GetSphereUV(const Math::Point3& p, double& u, double& v)
+        {
+            auto theta = std::acos(-p.y());
+            auto phi = std::atan2(-p.z(), p.x()) + Utilities::Pi;
+
+            u = phi / (2 * Utilities::Pi);
+            v = theta / Utilities::Pi;
         }
 
     private:
