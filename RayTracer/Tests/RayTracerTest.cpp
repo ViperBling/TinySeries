@@ -7,18 +7,18 @@
 #include <iostream>
 #include <chrono>
 
-int main()
+void WorldRandomSpheres()
 {
     Scene::GeometryList world;
 
-    // auto matGround = std::make_shared<Scene::Lambertian>(Math::Color(0.5, 0.5, 0.5));
-    // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, matGround));
-    auto checkerGround = std::make_shared<Scene::CheckerTexture>(0.32, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
-    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(checkerGround)));
+    auto matGround = std::make_shared<Scene::Lambertian>(Math::Color(0.5, 0.5, 0.5));
+    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, matGround));
+    // auto checkerGround = std::make_shared<Scene::CheckerTexture>(0.32, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
+    // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(checkerGround)));
 
-    for (int i = -2; i < 2; i++)
+    for (int i = -5; i < 5; i++)
     {
-        for (int j = -2; j < 2; j++)
+        for (int j = -5; j < 5; j++)
         {
             auto matChoose = Utilities::RandomDouble();
             float radius = 0.2;
@@ -58,7 +58,7 @@ int main()
         }
     }
 
-    auto matLambertian = std::make_shared<Scene::Lambertian>(Math::Color(0.4, 0.2, 0.1));
+    auto matLambertian = std::make_shared<Scene::Lambertian>(Math::Color(0.0, 0.5, 0.5));
     auto matGlass = std::make_shared<Scene::Dielectric>(1.5);
     auto matMetal = std::make_shared<Scene::Metal>(Math::Color(0.7, 0.6, 0.5), 0.1);
 
@@ -87,6 +87,41 @@ int main()
     auto tEnd = std::chrono::high_resolution_clock::now();
 
     std::clog << "Time: " << std::chrono::duration_cast<std::chrono::seconds>(tEnd - tStart).count() << "s" << std::flush;
+}
+
+void WorldTwoSpheres()
+{
+    Scene::GeometryList world;
+
+    auto checker = std::make_shared<Scene::CheckerTexture>(0.8, Math::Color(0.2, 0.3, 0.1), Math::Color(0.9, 0.9, 0.9));
+
+    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, -10, 0), 10, std::make_shared<Scene::Lambertian>(checker)));
+    world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0,  10, 0), 10, std::make_shared<Scene::Lambertian>(checker)));
+
+    Scene::Camera camera;
+    camera.mImageWidth = 960;
+    camera.mImageHeight = 540;
+    camera.mSamplesPerPixel = 100;
+    camera.mMaxDepth = 50;
+    camera.mFov = 20;
+    camera.mLookFrom = Math::Point3(13, 2, 3);
+    camera.mLookAt = Math::Point3(0, 0, 0);
+    camera.mUp = Math::Vector3(0, 1, 0);
+    camera.mDefocusAngle = 0;
+
+    Renderer::SceneRenderer renderer;
+    renderer.Initialize(camera);
+
+    auto tStart = std::chrono::high_resolution_clock::now();
+    renderer.Render(world);
+    auto tEnd = std::chrono::high_resolution_clock::now();
+
+    std::clog << "Time: " << std::chrono::duration_cast<std::chrono::seconds>(tEnd - tStart).count() << "s" << std::flush;
+}
+
+int main()
+{
+    WorldTwoSpheres();
 
     return 0;
 }

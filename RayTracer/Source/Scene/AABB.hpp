@@ -28,6 +28,15 @@ namespace Scene
             mZ = Utilities::Interval(box0.mZ, box1.mZ);
         }
 
+        AABB Padding()
+        {
+            double delta = 0.0001;
+            Utilities::Interval newX = (mX.Size() >= delta) ? mX : mX.Expand(delta);
+            Utilities::Interval newY = (mY.Size() >= delta) ? mY : mY.Expand(delta);
+            Utilities::Interval newZ = (mZ.Size() >= delta) ? mZ : mZ.Expand(delta);
+            return AABB(newX, newY, newZ);
+        }
+
         const Utilities::Interval& Axis(int n) const
         {
             if (n == 1) return mY;
@@ -37,20 +46,6 @@ namespace Scene
 
         bool Hit(const Scene::Ray& ray, Utilities::Interval rayT) const
         {
-            // for (int i = 0; i < 3; i++)
-            // {
-            //     auto t0 = std::fmin((Axis(i).mMin - ray.Origin()[i]) / ray.Direction()[i],
-            //                         (Axis(i).mMax - ray.Origin()[i]) / ray.Direction()[i]);
-            //     auto t1 = std::fmax((Axis(i).mMin - ray.Origin()[i]) / ray.Direction()[i],
-            //                         (Axis(i).mMax - ray.Origin()[i]) / ray.Direction()[i]);
-            //     rayT.mMin = std::fmax(t0, rayT.mMin);
-            //     rayT.mMax = std::fmin(t1, rayT.mMax);
-            //     if (rayT.mMax <= rayT.mMin)
-            //     {
-            //         return false;
-            //     }
-            // }
-            // return true;
             for (int i = 0; i < 3; i++)
             {
                 auto invDir = 1 / ray.Direction()[i];

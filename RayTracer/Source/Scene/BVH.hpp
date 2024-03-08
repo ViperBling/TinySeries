@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Utilities/Utilities.hpp"
 #include "Scene/Geometry.hpp"
@@ -36,6 +36,7 @@ namespace Scene
             else
             {
                 std::sort(objects.begin() + start, objects.begin() + end, comparator);
+
                 auto mid = start + objectSpan / 2;
                 mLeft = std::make_shared<BVHNode>(objects, start, mid);
                 mRight = std::make_shared<BVHNode>(objects, mid, end);
@@ -51,7 +52,8 @@ namespace Scene
                 return false;
             }
             bool hitLeft = mLeft->Hit(ray, rayT, hitPoint);
-            bool hitRight = mRight->Hit(ray, rayT, hitPoint);
+            // 左侧子树有交点，那么当前光线的测试范围应该变成rayT.mMin到交点的t值，否则会越过交点产生深度错误
+            bool hitRight = mRight->Hit(ray, Utilities::Interval(rayT.mMin, hitLeft ? hitPoint.mT : rayT.mMax), hitPoint);
             return hitLeft || hitRight;
         }
 
