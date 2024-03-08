@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Utilities/RTW_STBImage.hpp"
 #include "Utilities/Math.hpp"
 
 namespace Scene
@@ -69,5 +70,29 @@ namespace Scene
         double mInvScale;
         std::shared_ptr<Texture> mOdd;
         std::shared_ptr<Texture> mEven;
+    };
+
+    class ImageTexture : public Texture
+    {
+    public:
+        ImageTexture()
+            : mImageData(nullptr)
+            , mWidth(0)
+            , mHeight(0)
+            , mBytesPerScanline(0)
+        {}
+        ImageTexture(const char* filename);
+        ~ImageTexture();
+
+        virtual Math::Color Value(double u, double v, const Math::Point3& point) const override;
+
+    public:
+        const static int mBytesPerPixel = 3;
+
+    private:
+        unsigned char* mImageData;
+        int mWidth;
+        int mHeight;
+        int mBytesPerScanline;
     };
 }

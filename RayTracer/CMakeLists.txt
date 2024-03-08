@@ -4,6 +4,7 @@ project(RayTracer)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Stb REQUIRED)
 find_package(OpenMP REQUIRED)
 if (OPENMP_FOUND)
     message("OpenMP found")
@@ -13,6 +14,8 @@ endif()
 
 set(OutputBinary ${CMAKE_CURRENT_SOURCE_DIR}/Binary)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OutputBinary})
+
+file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets DESTINATION ${OutputBinary})
 
 add_subdirectory(Source)
 add_subdirectory(Tests)

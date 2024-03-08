@@ -12,4 +12,5 @@ add_library(SourceLib STATIC
     ${Utilities_Head}   ${Utilities_Src}
     ${Scene_Head}       ${Scene_Src}
 )
-target_include_directories(SourceLib PUBLIC ${SourcePath})
+target_link_libraries(SourceLib PUBLIC OpenMP::OpenMP_CXX)
+target_include_directories(SourceLib PUBLIC ${SourcePath} ${Stb_INCLUDE_DIR})
