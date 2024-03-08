@@ -2,6 +2,6 @@
 
 namespace Utilities
 {
-    const Interval Interval::Empty   (+Infinity, -Infinity);
-    const Interval Interval::Universe(-Infinity, +Infinity);
+    const Interval Interval::Empty   (+Math::Infinity, -Math::Infinity);
+    const Interval Interval::Universe(-Math::Infinity, +Math::Infinity);
 }

@@ -78,10 +78,10 @@ namespace Scene
         static void GetSphereUV(const Math::Point3& p, double& u, double& v)
         {
             auto theta = std::acos(-p.y());
-            auto phi = std::atan2(-p.z(), p.x()) + Utilities::Pi;
+            auto phi = std::atan2(-p.z(), p.x()) + Math::Pi;
 
-            u = phi / (2 * Utilities::Pi);
-            v = theta / Utilities::Pi;
+            u = phi / (2 * Math::Pi);
+            v = theta / Math::Pi;
         }
 
     private:

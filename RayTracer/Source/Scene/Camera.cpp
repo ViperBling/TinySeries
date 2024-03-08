@@ -17,7 +17,7 @@ namespace Scene
 
         // 摄像机中心到Viewport的距离
         // float focalLength = (mLookFrom - mLookAt).Length();
-        float theta = Utilities::DegreesToRadians(mFov);
+        float theta = Math::DegreesToRadians(mFov);
         float halfHeight = tan(theta / 2);
         float viewportHeight = 2.0 * halfHeight * mFocusDistance;
         float viewportWidth = mAspectRatio * viewportHeight;
@@ -47,7 +47,7 @@ namespace Scene
         auto viewportUpperLeft = mOrigin - (mFocusDistance * mW) - viewportU / 2 - viewportV / 2;
         mUpperLeftCorner = viewportUpperLeft + 0.5 * (mPixelDeltaU + mPixelDeltaV);
 
-        auto defocusRadius = mFocusDistance * std::tan(Utilities::DegreesToRadians(mDefocusAngle) / 2);
+        auto defocusRadius = mFocusDistance * std::tan(Math::DegreesToRadians(mDefocusAngle) / 2);
         mDefocusDiskU = defocusRadius * mU;
         mDefocusDiskV = defocusRadius * mV;
     }
@@ -77,8 +77,8 @@ namespace Scene
 
     Math::Vector3 Camera::PixelSampleSquare() const
     {
-        auto px = -0.5 + Utilities::RandomDouble();
-        auto py = -0.5 + Utilities::RandomDouble();
+        auto px = -0.5 + Math::RandomDouble();
+        auto py = -0.5 + Math::RandomDouble();
         return (px * mPixelDeltaU + py * mPixelDeltaV);
     }
 
@@ -89,7 +89,7 @@ namespace Scene
 
         auto rayOrigin = (mDefocusAngle <= 0) ? mOrigin : DefocusDiskSample();
         auto rayDirection = pixelSample - rayOrigin;
-        auto rayTime = Utilities::RandomDouble();
+        auto rayTime =Math::RandomDouble();
 
         return Ray(rayOrigin, rayDirection, rayTime);
     }
@@ -102,7 +102,7 @@ namespace Scene
         }
         HitPoint hit;
 
-        if (!worldHit.Hit(ray, Utilities::Interval(0.001, Utilities::Infinity), hit))
+        if (!worldHit.Hit(ray, Utilities::Interval(0.001, Math::Infinity), hit))
         {
             return mBackgroundColor;
         }

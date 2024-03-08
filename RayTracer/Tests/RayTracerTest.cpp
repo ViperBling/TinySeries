@@ -20,9 +20,9 @@ void WorldRandomSpheres()
     {
         for (int j = -5; j < 5; j++)
         {
-            auto matChoose = Utilities::RandomDouble();
+            auto matChoose = Math::RandomDouble();
             float radius = 0.2;
-            Math::Point3 center(i + 0.9 * Utilities::RandomDouble(), radius, j + 0.9 * Utilities::RandomDouble());
+            Math::Point3 center(i + 0.9 * Math::RandomDouble(), radius, j + 0.9 * Math::RandomDouble());
             // Math::Point3 center(i, radius, j);
 
             if ((center - Math::Point3(4, radius, 0)).Length() > 0.9)
@@ -34,7 +34,7 @@ void WorldRandomSpheres()
                     // Diffuse
                     auto albedo = Math::Vector3::Random() * Math::Vector3::Random();
                     sphereMaterial = std::make_shared<Scene::Lambertian>(albedo);
-                    // auto center2 = center + Math::Vector3(0, 0, Utilities::RandomDouble(0, 0.5));
+                    // auto center2 = center + Math::Vector3(0, 0, Math::RandomDouble(0, 0.5));
                     // world.Add(std::make_shared<Scene::Sphere>(center, center2, radius, sphereMaterial));
                     world.Add(std::make_shared<Scene::Sphere>(center, radius, sphereMaterial));
                 }
@@ -42,7 +42,7 @@ void WorldRandomSpheres()
                 {
                     // Metal
                     auto albedo = Math::Vector3::Random(0.5, 1);
-                    auto fuzz = Utilities::RandomDouble(0, 0.5);
+                    auto fuzz = Math::RandomDouble(0, 0.5);
                     sphereMaterial = std::make_shared<Scene::Metal>(albedo, fuzz);
                     world.Add(std::make_shared<Scene::Sphere>(center, radius, sphereMaterial));
                 }

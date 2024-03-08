@@ -1,12 +1,33 @@
 #pragma once
 
-#include "Utilities.hpp"
-
 #include <cmath>
 #include <iostream>
+#include <random>
+#include <limits>
+#include <memory>
 
 namespace Math
 {
+    const double Infinity = std::numeric_limits<double>::infinity();
+    const double Pi = 3.1415926535897932385;
+
+    inline double DegreesToRadians(double degrees)
+    {
+        return degrees * Pi / 180.0;
+    }
+
+    inline double RandomDouble()
+    {
+        static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+        static std::mt19937 generator;
+        return distribution(generator);
+    }
+
+    inline double RandomDouble(double min, double max)
+    {
+        return min + (max - min) * RandomDouble();
+    }
+
     class Vector3
     {
     public:
@@ -60,12 +81,12 @@ namespace Math
 
         static Vector3 Random()
         {
-            return Vector3(Utilities::RandomDouble(), Utilities::RandomDouble(), Utilities::RandomDouble());
+            return Vector3(RandomDouble(), RandomDouble(), RandomDouble());
         }
 
         static Vector3 Random(double min, double max)
         {
-            return Vector3(Utilities::RandomDouble(min, max), Utilities::RandomDouble(min, max), Utilities::RandomDouble(min, max));
+            return Vector3(RandomDouble(min, max), RandomDouble(min, max), RandomDouble(min, max));
         }
 
     public:
@@ -131,7 +152,7 @@ namespace Math
     {
         while (true)
         {
-            auto p = Vector3(Utilities::RandomDouble(-1, 1), Utilities::RandomDouble(-1, 1), 0);
+            auto p = Vector3(RandomDouble(-1, 1), RandomDouble(-1, 1), 0);
             if (p.LengthSquared() < 1)
             {
                 return p;
@@ -171,7 +192,7 @@ namespace Math
 
     inline int RandomInt(int min, int max)
     {
-        return static_cast<int>(Utilities::RandomDouble(min, max + 1));
+        return static_cast<int>(RandomDouble(min, max + 1));
     }
 
     inline Vector3 Reflect(const Vector3& v, const Vector3& n)

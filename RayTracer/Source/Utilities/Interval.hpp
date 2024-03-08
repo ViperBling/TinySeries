@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities.hpp"
+#include "Math.hpp"
 
 namespace Utilities
 {
@@ -9,8 +9,8 @@ namespace Utilities
     {
     public:
         Interval() 
-            : mMin(+Infinity)
-            , mMax(-Infinity)
+            : mMin(+Math::Infinity)
+            , mMax(-Math::Infinity)
         {}
         Interval(double min, double max)
             : mMin(min)

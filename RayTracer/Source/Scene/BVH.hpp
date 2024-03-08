@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Utilities/Utilities.hpp"
 #include "Scene/Geometry.hpp"
 
 namespace Scene

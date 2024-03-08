@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Utilities/Utilities.hpp"
 #include "Utilities/Math.hpp"
 
 namespace Scene
@@ -49,12 +48,21 @@ namespace Scene
 
         Math::Color Value(double u, double v, const Math::Point3& point) const override
         {
-            auto xInteger = static_cast<int>(std::floor(mInvScale * point.x()));
-            auto yInteger = static_cast<int>(std::floor(mInvScale * point.y()));
-            auto zInteger = static_cast<int>(std::floor(mInvScale * point.z()));
+            // auto xInteger = static_cast<int>(std::floor(mInvScale * point.x()));
+            // auto yInteger = static_cast<int>(std::floor(mInvScale * point.y()));
+            // auto zInteger = static_cast<int>(std::floor(mInvScale * point.z()));
 
-            bool isEven = (xInteger + yInteger + zInteger) % 2 == 0;
-            return isEven ? mEven->Value(u, v, point) : mOdd->Value(u, v, point);
+            // bool isEven = (xInteger + yInteger + zInteger) % 2 == 0;
+            // return isEven ? mEven->Value(u, v, point) : mOdd->Value(u, v, point);
+            auto sines = std::sin(mInvScale * point.x()) * std::sin(mInvScale * point.y()) * std::sin(mInvScale * point.z());
+            if (sines < 0)
+            {
+                return mOdd->Value(u, v, point);
+            }
+            else
+            {
+                return mEven->Value(u, v, point);
+            }
         }
     
     private:

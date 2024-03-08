@@ -34,7 +34,7 @@ namespace Scene
 
         bool cannotRefract = refractionRatio * sinTheta > 1.0;
         Math::Vector3 direction;
-        if (cannotRefract || Reflectance(cosTheta, refractionRatio) > Utilities::RandomDouble())
+        if (cannotRefract || Reflectance(cosTheta, refractionRatio) > Math::RandomDouble())
         {
             direction = Math::Reflect(unitDirection, hitPoint.mNormal);
         }
