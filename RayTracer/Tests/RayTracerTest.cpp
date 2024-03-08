@@ -126,11 +126,7 @@ int main()
     default:
         break;
     }
-
-    // camera.mUp = Math::Vector3(0, 1, 0);
     // camera.mDefocusAngle = 0.6;
-    // camera.mFocusDistance = 10;
-    // camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
 
     Renderer::SceneRenderer renderer;
     renderer.Initialize(camera);
