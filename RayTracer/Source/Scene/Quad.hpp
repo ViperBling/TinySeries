@@ -92,4 +92,25 @@ namespace Scene
         std::shared_ptr<Material> mMaterial;
         Scene::AABB mBoundingBox;
     };
+
+    inline std::shared_ptr<GeometryList> Box(const Math::Point3& a, const Math::Point3& b, std::shared_ptr<Scene::Material> mat)
+    {
+        auto sides = std::make_shared<GeometryList>();
+
+        auto minP = Math::Point3(std::fmin(a.x(), b.x()), std::fmin(a.y(), b.y()), std::fmin(a.z(), b.z()));
+        auto maxP = Math::Point3(std::fmax(a.x(), b.x()), std::fmax(a.y(), b.y()), std::fmax(a.z(), b.z()));
+
+        auto dx = Math::Vector3(maxP.x() - minP.x(), 0, 0);
+        auto dy = Math::Vector3(0, maxP.y() - minP.y(), 0);
+        auto dz = Math::Vector3(0, 0, maxP.z() - minP.z());
+
+        sides->Add(std::make_shared<Scene::Quad>(Math::Point3(minP.x(), minP.y(), maxP.z()),  dx,  dy, mat));
+        sides->Add(std::make_shared<Scene::Quad>(Math::Point3(maxP.x(), minP.y(), maxP.z()), -dz,  dy, mat));
+        sides->Add(std::make_shared<Scene::Quad>(Math::Point3(maxP.x(), minP.y(), minP.z()), -dx,  dy, mat));
+        sides->Add(std::make_shared<Scene::Quad>(Math::Point3(minP.x(), minP.y(), minP.z()),  dz,  dy, mat));
+        sides->Add(std::make_shared<Scene::Quad>(Math::Point3(minP.x(), maxP.y(), maxP.z()),  dx, -dz, mat));
+        sides->Add(std::make_shared<Scene::Quad>(Math::Point3(minP.x(), minP.y(), minP.z()),  dx,  dz, mat));
+
+        return sides;
+    }
 }

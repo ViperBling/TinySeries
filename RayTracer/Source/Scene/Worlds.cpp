@@ -187,7 +187,10 @@ namespace Scene
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 555), Math::Vector3(555, 0, 0), Math::Vector3(0, 555, 0), white));
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(555, 555, 555), Math::Vector3(-555, 0, 0), Math::Vector3(0, 0, -555), white));
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(343, 554, 332), Math::Vector3(-130, 0, 0), Math::Vector3(0, 0, -105), light));
+
         // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(190, 90, 190), 90, std::make_shared<Scene::Dielectric>(1.5)));
+        world.Add(Scene::Box(Math::Point3(130, 0, 65), Math::Point3(295, 165, 230), white));
+        world.Add(Scene::Box(Math::Point3(265, 0, 295), Math::Point3(430, 330, 460), white));
 
         return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
     }
