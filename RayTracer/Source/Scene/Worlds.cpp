@@ -165,6 +165,30 @@ namespace Scene
 
     Scene::GeometryList WorldCornellBox(Scene::Camera &camera)
     {
-        return Scene::GeometryList();
+        camera.mBackgroundColor = Math::Color(0, 0, 0);
+        camera.mLookFrom = Math::Point3(278, 278, -800);
+        camera.mLookAt = Math::Point3(278, 278, 0);
+        camera.mFov = 40;
+        camera.mImageWidth = 512;
+        camera.mImageHeight = 512;
+        camera.mSamplesPerPixel = 100;
+        camera.mMaxDepth = 50;
+
+        Scene::GeometryList world;
+
+        auto red = std::make_shared<Scene::Lambertian>(Math::Color(0.65, 0.05, 0.05));
+        auto white = std::make_shared<Scene::Lambertian>(Math::Color(0.73, 0.73, 0.73));
+        auto green = std::make_shared<Scene::Lambertian>(Math::Color(0.12, 0.45, 0.15));
+        auto light = std::make_shared<Scene::DiffuseLight>(Math::Color(15, 15, 15));
+
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(555, 0, 0), Math::Vector3(0, 555, 0), Math::Vector3(0, 0, 555), green));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 0), Math::Vector3(0, 555, 0), Math::Vector3(0, 0, 555), red));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 0), Math::Vector3(555, 0, 0), Math::Vector3(0, 0, 555), white));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 555), Math::Vector3(555, 0, 0), Math::Vector3(0, 555, 0), white));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(555, 555, 555), Math::Vector3(-555, 0, 0), Math::Vector3(0, 0, -555), white));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(343, 554, 332), Math::Vector3(-130, 0, 0), Math::Vector3(0, 0, -105), light));
+        // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(190, 90, 190), 90, std::make_shared<Scene::Dielectric>(1.5)));
+
+        return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
     }
 }
