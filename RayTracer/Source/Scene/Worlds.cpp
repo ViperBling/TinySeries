@@ -172,7 +172,7 @@ namespace Scene
         camera.mImageWidth = 512;
         camera.mImageHeight = 512;
         camera.mSamplesPerPixel = 100;
-        camera.mMaxDepth = 50;
+        camera.mMaxDepth = 100;
 
         Scene::GeometryList world;
 
@@ -188,9 +188,14 @@ namespace Scene
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(555, 555, 555), Math::Vector3(-555, 0, 0), Math::Vector3(0, 0, -555), white));
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(343, 554, 332), Math::Vector3(-130, 0, 0), Math::Vector3(0, 0, -105), light));
 
-        // world.Add(std::make_shared<Scene::Sphere>(Math::Point3(190, 90, 190), 90, std::make_shared<Scene::Dielectric>(1.5)));
-        world.Add(Scene::Box(Math::Point3(130, 0, 65), Math::Point3(295, 165, 230), white));
-        world.Add(Scene::Box(Math::Point3(265, 0, 295), Math::Point3(430, 330, 460), white));
+        std::shared_ptr<Geometry> box1 = Scene::Box(Math::Point3(0, 0, 0), Math::Point3(165, 330, 165), white);
+        box1 = std::make_shared<Scene::RotateY>(box1, 15);
+        box1 = std::make_shared<Scene::Translate>(box1, Math::Vector3(265, 0, 295));
+        world.Add(box1);
+        std::shared_ptr<Geometry> box2 = Scene::Box(Math::Point3(0, 0, 0), Math::Point3(165, 165, 165), white);
+        box2 = std::make_shared<Scene::RotateY>(box2, -18);
+        box2 = std::make_shared<Scene::Translate>(box2, Math::Vector3(130, 0, 65));
+        world.Add(box2);
 
         return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
     }

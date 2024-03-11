@@ -57,4 +57,14 @@ namespace Utilities
         static const Interval Empty;
         static const Interval Universe;
     };
+
+    inline Interval operator+(const Interval& iVal, double offset)
+    {
+        return Interval(iVal.mMin + offset, iVal.mMax + offset);
+    }
+
+    inline Interval operator+(double offset, const Interval& iVal)
+    {
+        return iVal + offset;
+    }
 }

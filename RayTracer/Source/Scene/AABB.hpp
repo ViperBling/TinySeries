@@ -74,4 +74,14 @@ namespace Scene
         Utilities::Interval mY;
         Utilities::Interval mZ;
     };
+    
+    inline AABB operator+(const AABB& box, const Math::Point3& offset)
+    {
+        return AABB(box.mX + offset.x(), box.mY + offset.y(), box.mZ + offset.z());
+    }
+
+    inline AABB operator+(const Math::Point3& offset, const AABB& box)
+    {
+        return box + offset;
+    }
 }
