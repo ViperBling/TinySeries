@@ -54,6 +54,13 @@ namespace Scene
             }
 
             auto intersectionPoint = ray.At(t);
+            Math::Vector3 planarHitPointVec = intersectionPoint - mQ;
+            auto alpha = Math::Dot(mW, Math::Cross(planarHitPointVec, mV));
+            auto beta = Math::Dot(mW, Math::Cross(mU, planarHitPointVec));
+            if (!IsInterior(alpha, beta, hitPoint))
+            {
+                return false;
+            }
 
             hitPoint.mT = t;
             hitPoint.mPoint = intersectionPoint;
@@ -63,11 +70,22 @@ namespace Scene
             return true;
         }
 
+        bool IsInterior(double a, double b, HitPoint& point) const
+        {
+            if (a < 0 || a > 1 || b < 0 || b > 1)
+            {
+                return false;
+            }
+            point.mU = a;
+            point.mV = b;
+            return true;
+        }
+
     private:
         Math::Point3 mQ;
         Math::Vector3 mU;
         Math::Vector3 mV;
-        Math::Vector3 mW;
+        Math::Vector3 mW;           // 为了测试交点是否在平面范围内，alpha = w · (p x v); beta = w · (u x p)
         Math::Vector3 mNormal;
         double mD;
 
