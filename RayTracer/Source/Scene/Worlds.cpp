@@ -238,4 +238,71 @@ namespace Scene
 
         return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
     }
+
+    Scene::GeometryList WorldFinal(Scene::Camera &camera, int width, int height, int samples, int maxDepth)
+    {
+        camera.mBackgroundColor = Math::Color(0, 0, 0);
+        camera.mLookFrom = Math::Point3(478, 278, -600);
+        camera.mLookAt = Math::Point3(278, 278, 0);
+        camera.mFov = 40;
+        camera.mImageWidth = width;
+        camera.mImageHeight = height;
+        camera.mSamplesPerPixel = samples;
+        camera.mMaxDepth = maxDepth;
+
+        Scene::GeometryList world;
+        Scene::GeometryList boxes1;
+
+        int boxesPerSide = 20;
+        auto ground = std::make_shared<Scene::Lambertian>(Math::Color(0.48, 0.83, 0.53));
+        for (int i = 0; i < boxesPerSide; i++)
+        {
+            for (int j = 0; j < boxesPerSide; j++)
+            {
+                double w = 100;
+                double x0 = -1000 + i * w;
+                double z0 = -1000 + j * w;
+                double y0 = 0;
+                double x1 = x0 + w;
+                double y1 = Math::RandomDouble(1, 101);
+                double z1 = z0 + w;
+
+                boxes1.Add(Scene::Box(Math::Point3(x0, y0, z0), Math::Point3(x1, y1, z1), ground));
+            }
+        }
+        world.Add(std::make_shared<Scene::BVHNode>(boxes1));
+
+        auto light = std::make_shared<Scene::DiffuseLight>(Math::Color(7, 7, 7));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(123, 554, 147), Math::Vector3(300, 0, 0), Math::Vector3(0, 0, 265), light));
+
+        auto center1 = Math::Point3(400, 400, 200);
+        auto center2 = center1 + Math::Vector3(30, 0, 0);
+        auto movingSphereMaterial = std::make_shared<Scene::Lambertian>(Math::Color(0.7, 0.3, 0.1));
+        world.Add(std::make_shared<Scene::Sphere>(center1, center2, 50, movingSphereMaterial));
+
+        world.Add(std::make_shared<Scene::Sphere>(Math::Point3(260, 150, 45), 50, std::make_shared<Scene::Dielectric>(1.5)));
+        world.Add(std::make_shared<Scene::Sphere>(Math::Point3(0, 150, 145), 50, std::make_shared<Scene::Metal>(Math::Color(0.8, 0.8, 0.9), 1.0)));
+
+        auto boundary = std::make_shared<Scene::Sphere>(Math::Point3(360, 150, 145), 70, std::make_shared<Scene::Dielectric>(1.5));
+        world.Add(boundary);
+        world.Add(std::make_shared<Scene::ConstantMedium>(boundary, 0.2, Math::Color(0.2, 0.4, 0.9)));
+        boundary = std::make_shared<Scene::Sphere>(Math::Point3(0, 0, 0), 5000, std::make_shared<Scene::Dielectric>(1.5));
+        world.Add(std::make_shared<Scene::ConstantMedium>(boundary, 0.0001, Math::Color(1, 1, 1)));
+
+        auto emat = std::make_shared<Scene::Lambertian>(std::make_shared<Scene::ImageTexture>("Assets/Textures/earthmap.jpg"));
+        world.Add(std::make_shared<Scene::Sphere>(Math::Point3(400, 200, 400), 100, emat));
+        auto pertext = std::make_shared<Scene::NoiseTexture>(0.1);
+        world.Add(std::make_shared<Scene::Sphere>(Math::Point3(220, 280, 300), 80, std::make_shared<Scene::Lambertian>(pertext)));
+
+        Scene::GeometryList boxes2;
+        auto white = std::make_shared<Scene::Lambertian>(Math::Color(0.73, 0.73, 0.73));
+        int ns = 1000;
+        for (int j = 0; j < ns; j++)
+        {
+            boxes2.Add(Scene::Box(Math::Point3::Random(0, 165), Math::Point3::Random(0, 165), white));
+        }
+        world.Add(std::make_shared<Scene::Translate>(std::make_shared<Scene::RotateY>(std::make_shared<Scene::BVHNode>(boxes2), 15), Math::Vector3(-100, 270, 395)));
+
+        return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
+    }
 }

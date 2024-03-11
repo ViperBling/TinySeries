@@ -19,4 +19,5 @@ namespace Scene
     Scene::GeometryList WorldSimpleLight(Scene::Camera& camera);
     Scene::GeometryList WorldCornellBox(Scene::Camera& camera);
     Scene::GeometryList WorldCornellSmoke(Scene::Camera& camera);
+    Scene::GeometryList WorldFinal(Scene::Camera& camera, int width, int height, int samples, int maxDepth);
 }
