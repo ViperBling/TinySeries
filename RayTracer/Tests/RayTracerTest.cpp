@@ -92,7 +92,7 @@ Scene::GeometryList WorldTowPerlineSpheres()
 {
     Scene::GeometryList world;
 
-    auto perlinTexture = std::make_shared<Scene::NoiseTexture>(4);
+    auto perlinTexture = std::make_shared<Scene::NoiseTexture>(8);
     auto perlinSurface = std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(perlinTexture));
     auto perlinGlobe = std::make_shared<Scene::Sphere>(Math::Point3(0, 2, 0), 2, std::make_shared<Scene::Lambertian>(perlinTexture));
 

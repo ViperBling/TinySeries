@@ -88,11 +88,13 @@ namespace Utilities
 
     double PerlinNoise::PerlinInterp(Math::Vector3 c[2][2][2], double u, double v, double w)
     {
+        // Hermite Cubic Spline
         auto uu = u * u * (3 - 2 * u);
         auto vv = v * v * (3 - 2 * v);
         auto ww = w * w * (3 - 2 * w);
         auto accumulate = 0.0;
 
+        // Trilinear Interpolation
         for (int i = 0; i < 2; ++i)
         {
             for (int j = 0; j < 2; ++j)
