@@ -109,11 +109,14 @@ namespace Scene
         
         Ray scattered;
         Math::Color attenuation;
+        Math::Color emittedColor = hit.mMaterial->Emitted(hit.mU, hit.mV, hit.mPoint);
+
         if (!hit.mMaterial->Scatter(ray, hit, attenuation, scattered))
         {
-            return Math::Color(0, 0, 0);
+            return emittedColor;
         }
-        return attenuation * RayColor(scattered, worldHit, depth - 1);
+        Math::Color scatteredColor = attenuation * RayColor(scattered, worldHit, depth - 1);
+        return emittedColor + scatteredColor;
     }
 
     Math::Point3 Camera::DefocusDiskSample() const

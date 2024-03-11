@@ -13,6 +13,10 @@ namespace Scene
     public:
         virtual ~Material() = default;
         virtual bool Scatter(const Ray& ray, const HitPoint& hitPoint, Math::Color& attenuation, Ray& scattered) const = 0;
+        virtual Math::Color Emitted(double u, double v, const Math::Point3& point) const
+        {
+            return Math::Color(0, 0, 0);
+        }
     };
 
     class Lambertian : public Material

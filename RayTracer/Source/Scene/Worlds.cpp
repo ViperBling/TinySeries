@@ -120,7 +120,7 @@ namespace Scene
         camera.mFov = 80;
         camera.mImageWidth = 512;
         camera.mImageHeight = 512;
-        
+
         Scene::GeometryList world;
 
         auto leftRed        = std::make_shared<Scene::Lambertian>(Math::Color(1.0, 0.2, 0.2));
@@ -134,6 +134,31 @@ namespace Scene
         world.Add(std::make_shared<Scene::Quad>(Math::Point3( 3, -2, 1), Math::Vector3(0, 0,  4), Math::Vector3(0, 4,  0), rightBlue));
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(-2,  3, 1), Math::Vector3(4, 0,  0), Math::Vector3(0, 0,  4), upperOrange));
         world.Add(std::make_shared<Scene::Quad>(Math::Point3(-2, -3, 5), Math::Vector3(4, 0,  0), Math::Vector3(0, 0, -4), lowerTeal));
+
+        return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
+    }
+
+    Scene::GeometryList WorldSimpleLight(Scene::Camera &camera)
+    {
+        camera.mBackgroundColor = Math::Color(0, 0, 0);
+        camera.mLookFrom = Math::Point3(26, 3, 6);
+        camera.mLookAt = Math::Point3(0, 2, 0);
+        camera.mFov = 20;
+
+        Scene::GeometryList world;
+
+        auto perlinTexture = std::make_shared<Scene::NoiseTexture>(4);
+        auto perlinSurface = std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(perlinTexture));
+        auto perlinGlobe = std::make_shared<Scene::Sphere>(Math::Point3(0, 2, 0), 2, std::make_shared<Scene::Lambertian>(perlinTexture));
+
+        auto diffuseLightMat = std::make_shared<Scene::DiffuseLight>(Math::Color(4, 4, 4));
+        auto quadLight = std::make_shared<Scene::Quad>(Math::Point3(3, 1, -2), Math::Vector3(2, 0, 0), Math::Vector3(0, 2, 0), diffuseLightMat);
+        auto sphereLight = std::make_shared<Scene::Sphere>(Math::Point3(0, 7, 0), 2, diffuseLightMat);
+
+        world.Add(perlinSurface);
+        world.Add(perlinGlobe);
+        world.Add(quadLight);
+        world.Add(sphereLight);
 
         return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
     }

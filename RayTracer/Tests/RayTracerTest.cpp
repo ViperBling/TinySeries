@@ -11,14 +11,14 @@ int main()
     Scene::Camera camera;
     camera.mImageWidth = 960;
     camera.mImageHeight = 540;
-    camera.mSamplesPerPixel = 100;
-    camera.mMaxDepth = 50;
+    camera.mSamplesPerPixel = 500;
+    camera.mMaxDepth = 100;
     camera.mFocusDistance = 10;
     camera.mUp = Math::Vector3(0, 1, 0);
     camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
     camera.mFov = 20;
 
-    switch (4)
+    switch (5)
     {
     case 0 :
         world = Scene::WorldRandomSpheres(camera);       
@@ -34,6 +34,9 @@ int main()
         break;
     case 4 : 
         world = Scene::WorldQuads(camera);
+        break;
+    case 5 :
+        world = Scene::WorldSimpleLight(camera);
         break;
     default:
         break;
