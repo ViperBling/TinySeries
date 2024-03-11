@@ -3,6 +3,7 @@
 #include "Sphere.hpp"
 #include "Quad.hpp"
 #include "Light.hpp"
+#include "ConstantMedium.hpp"
 #include "Material.hpp"
 #include "BVH.hpp"
 #include "Texture.hpp"
@@ -17,4 +18,5 @@ namespace Scene
     Scene::GeometryList WorldQuads(Scene::Camera& camera);
     Scene::GeometryList WorldSimpleLight(Scene::Camera& camera);
     Scene::GeometryList WorldCornellBox(Scene::Camera& camera);
+    Scene::GeometryList WorldCornellSmoke(Scene::Camera& camera);
 }

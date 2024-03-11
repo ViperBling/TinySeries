@@ -67,4 +67,19 @@ namespace Scene
     private:
         double mRefraction;
     };
+
+    class Isotropic : public Material
+    {
+    public:
+        Isotropic(const Math::Color& color)
+            : mAlbedo(std::make_shared<SolidTexture>(color))
+        {}
+        Isotropic(std::shared_ptr<Texture> albedo)
+            : mAlbedo(albedo)
+        {}
+        bool Scatter(const Ray& ray, const HitPoint& hitPoint, Math::Color& attenuation, Ray& scattered) const override;
+    
+    private:
+        std::shared_ptr<Texture> mAlbedo;
+    };
 }

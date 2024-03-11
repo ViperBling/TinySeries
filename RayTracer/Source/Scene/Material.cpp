@@ -45,4 +45,11 @@ namespace Scene
         scattered = Ray(hitPoint.mPoint, direction, ray.Time());
         return true;
     }
+
+    bool Isotropic::Scatter(const Ray &ray, const HitPoint &hitPoint, Math::Color &attenuation, Ray &scattered) const
+    {
+        scattered = Ray(hitPoint.mPoint, Math::RandomUnitVector(), ray.Time());
+        attenuation = mAlbedo->Value(hitPoint.mU, hitPoint.mV, hitPoint.mPoint);
+        return true;
+    }
 }

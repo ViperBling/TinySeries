@@ -18,7 +18,7 @@ int main()
     camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
     camera.mFov = 20;
 
-    switch (6)
+    switch (7)
     {
     case 0 :
         world = Scene::WorldRandomSpheres(camera);       
@@ -40,6 +40,9 @@ int main()
         break;
     case 6 :
         world = Scene::WorldCornellBox(camera);
+        break;
+    case 7 :
+        world = Scene::WorldCornellSmoke(camera);
         break;
     default:
         break;

@@ -199,4 +199,43 @@ namespace Scene
 
         return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
     }
+
+    Scene::GeometryList WorldCornellSmoke(Scene::Camera &camera)
+    {
+        camera.mBackgroundColor = Math::Color(0, 0, 0);
+        camera.mLookFrom = Math::Point3(278, 278, -800);
+        camera.mLookAt = Math::Point3(278, 278, 0);
+        camera.mFov = 40;
+        camera.mImageWidth = 512;
+        camera.mImageHeight = 512;
+        camera.mSamplesPerPixel = 500;
+        camera.mMaxDepth = 100;
+
+        Scene::GeometryList world;
+
+        auto red = std::make_shared<Scene::Lambertian>(Math::Color(0.65, 0.05, 0.05));
+        auto white = std::make_shared<Scene::Lambertian>(Math::Color(0.73, 0.73, 0.73));
+        auto green = std::make_shared<Scene::Lambertian>(Math::Color(0.12, 0.45, 0.15));
+        auto light = std::make_shared<Scene::DiffuseLight>(Math::Color(15, 15, 15));
+
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(555, 0, 0), Math::Vector3(0, 555, 0), Math::Vector3(0, 0, 555), green));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 0), Math::Vector3(0, 555, 0), Math::Vector3(0, 0, 555), red));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 0), Math::Vector3(555, 0, 0), Math::Vector3(0, 0, 555), white));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(0, 0, 555), Math::Vector3(555, 0, 0), Math::Vector3(0, 555, 0), white));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(555, 555, 555), Math::Vector3(-555, 0, 0), Math::Vector3(0, 0, -555), white));
+        world.Add(std::make_shared<Scene::Quad>(Math::Point3(343, 554, 332), Math::Vector3(-130, 0, 0), Math::Vector3(0, 0, -105), light));
+
+        std::shared_ptr<Geometry> box1 = Scene::Box(Math::Point3(0, 0, 0), Math::Point3(165, 330, 165), white);
+        box1 = std::make_shared<Scene::RotateY>(box1, 15);
+        box1 = std::make_shared<Scene::Translate>(box1, Math::Vector3(265, 0, 295));
+        
+        std::shared_ptr<Geometry> box2 = Scene::Box(Math::Point3(0, 0, 0), Math::Point3(165, 165, 165), white);
+        box2 = std::make_shared<Scene::RotateY>(box2, -18);
+        box2 = std::make_shared<Scene::Translate>(box2, Math::Vector3(130, 0, 65));
+
+        world.Add(std::make_shared<Scene::ConstantMedium>(box1, 0.01, Math::Color(0, 1, 1)));
+        world.Add(std::make_shared<Scene::ConstantMedium>(box2, 0.01, Math::Color(1, 1, 0)));
+
+        return Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
+    }
 }
