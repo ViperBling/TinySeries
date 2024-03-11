@@ -2,6 +2,7 @@
 
 #include "Utilities/RTW_STBImage.hpp"
 #include "Utilities/Math.hpp"
+#include "Utilities/PerlinNoise.hpp"
 
 namespace Scene
 {
@@ -94,5 +95,27 @@ namespace Scene
         int mWidth;
         int mHeight;
         int mBytesPerScanline;
+    };
+
+    class NoiseTexture : public Texture
+    {
+    public:
+        NoiseTexture() = default;
+        NoiseTexture(double scale)
+            : mScale(scale)
+        {}
+
+        Math::Color Value(double u, double v, const Math::Point3& point) const override
+        {
+            // return Math::Color(1, 1, 1) * 0.5 * (1 + mNoise.Turb(point));
+            // return Math::Color(1, 1, 1) * 0.5 * (1 + std::sin(10 * point.z() + 10 * mNoise.Turb(point)));
+            // return Math::Color(1, 1, 1) * mNoise.Noise(point);
+            auto s = mScale * point;
+            return Math::Color(1, 1, 1) * 0.5 * (1 + std::sin(s.z() + 10 * mNoise.Turb(s)));
+        }
+    
+    private:
+        Utilities::PerlinNoise mNoise;
+        double mScale;
     };
 }

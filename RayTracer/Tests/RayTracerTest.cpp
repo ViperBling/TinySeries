@@ -88,6 +88,21 @@ Scene::GeometryList WorldEarth()
     return Scene::GeometryList(std::make_shared<Scene::BVHNode>(Scene::GeometryList(globe)));
 }
 
+Scene::GeometryList WorldTowPerlineSpheres()
+{
+    Scene::GeometryList world;
+
+    auto perlinTexture = std::make_shared<Scene::NoiseTexture>(4);
+    auto perlinSurface = std::make_shared<Scene::Sphere>(Math::Point3(0, -1000, 0), 1000, std::make_shared<Scene::Lambertian>(perlinTexture));
+    auto perlinGlobe = std::make_shared<Scene::Sphere>(Math::Point3(0, 2, 0), 2, std::make_shared<Scene::Lambertian>(perlinTexture));
+
+    world.Add(perlinSurface);
+    world.Add(perlinGlobe);
+    world = Scene::GeometryList(std::make_shared<Scene::BVHNode>(world));
+
+    return world;
+}
+
 int main()
 {
     Scene::GeometryList world;
@@ -96,30 +111,37 @@ int main()
     camera.mImageWidth = 960;
     camera.mImageHeight = 540;
     camera.mSamplesPerPixel = 100;
-    camera.mMaxDepth = 10;
+    camera.mMaxDepth = 50;
     camera.mFocusDistance = 10;
     camera.mUp = Math::Vector3(0, 1, 0);
 
-    switch (2)
+    switch (3)
     {
-    case 0:
+    case 0 :
         world = WorldRandomSpheres();
         camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
         camera.mLookFrom = Math::Point3(13, 2, 3);
         camera.mLookAt = Math::Point3(0, 0, 0);
         camera.mFov = 20;
         break;
-    case 1:
+    case 1 :
         world = WorldTwoSpheres();
         camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
         camera.mLookFrom = Math::Point3(13, 2, 0);
         camera.mLookAt = Math::Point3(0, 0, 0);
         camera.mFov = 20;
         break;
-    case 2:
+    case 2 :
         world = WorldEarth();
         camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
         camera.mLookFrom = Math::Point3(0, 0, 12);
+        camera.mLookAt = Math::Point3(0, 0, 0);
+        camera.mFov = 20;
+        break;
+    case 3 : 
+        world = WorldTowPerlineSpheres();
+        camera.mBackgroundColor = Math::Color(0.7, 0.8, 1.0);
+        camera.mLookFrom = Math::Point3(13, 2, 3);
         camera.mLookAt = Math::Point3(0, 0, 0);
         camera.mFov = 20;
         break;
